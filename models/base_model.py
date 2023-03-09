@@ -5,8 +5,6 @@ Houses the base model of the other classes
 import models
 import uuid
 from datetime import datetime
-import json
-from os import path
 
 
 class BaseModel():
@@ -23,7 +21,7 @@ class BaseModel():
         if kwargs:
             for i, j in kwargs.items():
                 if i == "created_at" or i == "updated_at":
-                    getattr(self, i, datetime.strftime(j, "%Y-%m-%d:%H.%M.%S.%f"))
+                    setattr(self, i, datetime.strftime(j, "%Y-%m-%dT%H:%M:%S.%f"))
                 elif i == "__class__":
                     continue
                 else:
