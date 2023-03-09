@@ -20,12 +20,9 @@ class BaseModel:
         :param created_at: where it was created at
         :param updated_at: where it was updated at
         """
-        updated = datetime.now()
-        ided = str(uuid.uuid4())
-        created = datetime.now()
-        self.id = ided
-        self.created_at = created
-        self.updated_at = updated
+        self.id = str(uuid.uuid4())
+        self.created_at = datetime.now()
+        self.updated_at = datetime.now()
 
     def __str__(self):
         """
