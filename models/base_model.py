@@ -34,7 +34,6 @@ class BaseModel():
         :return: updates the current datetime by modifying the updated_at variable
         """
         self.updated_at = datetime.now()
-        return self.updated_at
 
     def to_dict(self):
         """
