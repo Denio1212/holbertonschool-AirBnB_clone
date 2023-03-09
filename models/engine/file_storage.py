@@ -42,7 +42,7 @@ class FileStorage():
         """
         if path.isfile(self.__file_path):
             with open(self.__file_path) as f:
-                dict = json.load(f)
-                for a, b in dict.items():
-                    cls = a["class"]
-                    self.new(eval(cls)(**a))
+                dic = json.load(f)
+                for a, b in dic.items():
+                    cls = b["class"]
+                    self.new(eval(cls)(**b))
