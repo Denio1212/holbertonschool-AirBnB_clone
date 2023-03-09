@@ -51,12 +51,11 @@ class BaseModel():
         :return: dictionary containing all keys/values
         isoformat -> makes the datetime into a string in the ISO date format.
         """
-        dict = {}
+        dic = {}
         for i, n in self.__dict__.items():
             if i == "created_at" or i == "updated_at":
-                dict[i] = datetime.isoformat(n)
+                dic[i] = datetime.isoformat(n)
             else:
-                dict[i] = n
-        dict["__class__"] = self.__class__.__name__
-        return dict
-
+                dic[i] = n
+        dic["__class__"] = self.__class__.__name__
+        return dic
