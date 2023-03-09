@@ -5,6 +5,7 @@ Houses the base model of the other classes
 import models
 import uuid
 from datetime import datetime
+import json
 
 
 class BaseModel():
@@ -44,7 +45,11 @@ class BaseModel():
         :return: updates the current datetime by modifying the updated_at variable
         """
         self.updated_at = datetime.now()
-        models.storage.save()
+        dicti = {}
+        for a, b in self.__objects.items():
+            dicti = {a: b.to_dict()}
+        with open(self.__file_path, mode="w") as f:
+            json.dump(dicti, f)
 
     def to_dict(self):
         """
