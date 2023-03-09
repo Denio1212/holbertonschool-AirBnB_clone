@@ -20,6 +20,7 @@ class BaseModel():
         :param created_at: where it was created at
         :param updated_at: where it was updated at
         """
+        self.__objects = None
         self.__file_path = None
         if kwargs:
             for i, j in kwargs.items():
