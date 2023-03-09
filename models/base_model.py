@@ -53,7 +53,7 @@ class BaseModel():
         """
         dict = {}
         for i, n in self.__dict__.items():
-            if i == "created_at" or n == "updated_at":
+            if i == "created_at" or i == "updated_at":
                 dict[i] = datetime.isoformat(n)
             else:
                 dict[i] = n
