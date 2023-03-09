@@ -11,7 +11,7 @@ class BaseModel():
     """
     base of goods
     """
-    def __init__(self, id, created_at, updated_at):
+    def __init__(self, *args, **kwargs):
         """
         constructor
         :param id: id of object instance
