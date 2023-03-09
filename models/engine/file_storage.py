@@ -6,7 +6,7 @@ import json
 from os import path
 
 
-class FileStorage():
+class FileStorage:
     """
     The storage for all files
     """
