@@ -20,8 +20,6 @@ class BaseModel():
         :param created_at: where it was created at
         :param updated_at: where it was updated at
         """
-        self.__objects = None
-        self.__file_path = None
         if kwargs:
             for i, j in kwargs.items():
                 if i == "created_at" or i == "updated_at":
@@ -48,11 +46,6 @@ class BaseModel():
         :return: updates the current datetime by modifying the updated_at variable
         """
         self.updated_at = datetime.now()
-        dicti = {}
-        for a, b in self.__objects.items():
-            dicti = {a: b.to_dict()}
-        with open(self.__file_path, mode="w") as f:
-            json.dump(dicti, f)
 
     def to_dict(self):
         """
