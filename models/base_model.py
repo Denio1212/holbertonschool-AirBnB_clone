@@ -48,15 +48,14 @@ class BaseModel():
         self.updated_at = datetime.now()
 
     def to_dict(self):
+        """Returns a dictionary containing all keys/values of
+        __dict__ of the instance
         """
-        :return: dictionary containing all keys/values
-        isoformat -> makes the datetime into a string in the ISO date format.
-        """
-        dic = {}
-        for i, n in self.__dict__.items():
-            if i == "created_at" or i == "updated_at":
-                dic[i] = datetime.isoformat(n)
+        d = {}
+        for k, v in self.__dict__.items():
+            if k == "created_at" or k == "updated_at":
+                d[k] = dt.isoformat(v)
             else:
-                dic[i] = n
-        dic["__class__"] = self.__class__.__name__
-        return dic
+                d[k] = v
+        d["__class__"] = self.__class__.__name__
+        return d
