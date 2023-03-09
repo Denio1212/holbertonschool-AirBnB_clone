@@ -44,5 +44,5 @@ class FileStorage():
             with open(self.__file_path) as f:
                 dic = json.load(f)
                 for a, b in dic.items():
-                    cls = b["class"]
+                    cls = b["__class__"]
                     self.new(eval(cls)(**b))
