@@ -54,7 +54,7 @@ class BaseModel():
         d = {}
         for k, v in self.__dict__.items():
             if k == "created_at" or k == "updated_at":
-                d[k] = dt.isoformat(v)
+                d[k] = datetime.isoformat(v)
             else:
                 d[k] = v
         d["__class__"] = self.__class__.__name__
