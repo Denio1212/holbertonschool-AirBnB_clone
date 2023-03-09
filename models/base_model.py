@@ -2,14 +2,12 @@
 """
 Houses the base model of the other classes
 """
-import uuid
-
 import models
 import uuid
 from datetime import datetime
 
 
-class BaseModel:
+class BaseModel():
     """
     base of goods
     """
