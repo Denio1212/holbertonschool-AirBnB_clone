@@ -7,7 +7,7 @@ import uuid
 from datetime import datetime
 
 
-class BaseModel():
+class BaseModel:
     """
     base of goods
     """
@@ -44,6 +44,7 @@ class BaseModel():
         :return: updates the current datetime by modifying the updated_at variable
         """
         self.updated_at = datetime.now()
+        models.storage.save()
 
     def to_dict(self):
         """Returns a dictionary containing all keys/values of
