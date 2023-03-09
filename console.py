@@ -12,14 +12,14 @@ class HBNBCommand(cmd.Cmd):
     """
     prompt = "(hbnb)"
 
-    def quit(self):
+    def do_quit(self, line):
         """
         quits
         :return: True
         """
         return True
 
-    def do_EOF(self):
+    def do_EOF(self, line):
         """
         eof write in
         :return: True and prints an empty line
@@ -36,5 +36,5 @@ class HBNBCommand(cmd.Cmd):
 
 
 
-    if __name__ == '__main__':
-        HBNBCommand().cmdloop()
+if __name__ == '__main__':
+    HBNBCommand().cmdloop()
