@@ -20,15 +20,6 @@ class BaseModel():
         :param created_at: where it was created at
         :param updated_at: where it was updated at
         """
-        if kwargs:
-            for i, j in kwargs.items():
-                if i == "created_at" or i == "updated_at":
-                    setattr(self, i, datetime.strftime(j, "%Y-%m-%d:%H.%M.%S.%f"))
-                elif i == "__class__":
-                    continue
-                else:
-                    setattr(self, i, j)
-        else:
             self.id = str(uuid.uuid4())
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
