@@ -7,7 +7,6 @@ import uuid
 from datetime import datetime
 
 
-
 class BaseModel():
     """
     base of goods
