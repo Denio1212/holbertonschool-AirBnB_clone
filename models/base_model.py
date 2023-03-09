@@ -20,6 +20,7 @@ class BaseModel():
         :param created_at: where it was created at
         :param updated_at: where it was updated at
         """
+        self.__file_path = None
         if kwargs:
             for i, j in kwargs.items():
                 if i == "created_at" or i == "updated_at":
