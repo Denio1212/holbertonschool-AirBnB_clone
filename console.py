@@ -16,8 +16,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_quit(self, line):
         """
-        quits
-        :return: True
+        quits the console
         """
         return True
 
