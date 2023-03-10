@@ -51,10 +51,10 @@ class BaseModel:
         __dict__ of the instance
         """
         d = {}
-        for k, v in self.__dict__.items():
+        for k, vi in self.__dict__.items():
             if k == "created_at" or k == "updated_at":
-                d[k] = datetime.isoformat(v)
+                d[k] = datetime.isoformat(vi)
             else:
-                d[k] = v
+                d[k] = vi
         d["__class__"] = self.__class__.__name__
         return d
