@@ -7,7 +7,7 @@
 	width: 100%;
 	border: 1px solid #DDDDDD;
 	border-radius: 4px;
-}
+	}
 
 .container .filters button {
 	font-size: 18px;
@@ -36,17 +36,61 @@
 	border-right: 1px solid #DDDDDD;
 	float: left;
 }
+
+.lists {
+	background: #FAFAFA;
+	border: 1px solid #DDDDDD;
+	border-radius: 4px;
+	list-style-type: none;
+	padding-bottom: 20px;
+	display: none;
+	position: relative;
+	z-index: 1;
+}
+
+.lists h2 {
+	margin-top: 30px;
+	margin-left: -10px;
+}
+
+.locations .lists ul {
+	list-style-type: none;
+	margin-left: -30px;
+	margin-top: -15px;
+	margin-bottom: 40px;
+}
+
+.locations:hover .lists {
+	display: block;
+}
+
 .amenities
 {
 	height: 100%;
 	width: 25%;
 	float: left;
 }
+
+.amenities .lists {
+	padding-left: 30px;
+	padding-right: 40px;
+x}
+
+.amenities .lists li {
+	margin-top: 20px;
+	margin-left: 10px;
+}
+
+.amenities:hover .lists {
+	display: block;
+}
+
 .locations h3, .amenities h3
 {
 	font-weight: 600;
 	margin-left: 50px;
 }
+
 .locations h4, .amenities h4
 {
 	font-weight: 400;
