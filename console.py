@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 '''Module of AirBNB console'''
 import cmd
-from shlex import split as sp
+from shlex import split
 from models.base_model import BaseModel
 import models
 from models.engine.file_storage import FileStorage as storage

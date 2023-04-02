@@ -32,26 +32,20 @@ class BaseModel:
             self.updated_at = datetime.now()
             models.storage.new(self)
 
+    # String representation of instance
     def __str__(self):
-        """
-        prints out the name the id and the dict of the object
-        """
-        name = self.__class__.__name__
-        return "[{}] ({}) {}".format(name, self.id, self.__dict__)
+        string = "[{}]".format(self.__class__.__name__)
+        string += " ({}) {}".format(self.id, self.__dict__)
+        return string
 
+    # Updates datetime and calls storage.save method
     def save(self):
-        """
-        :return: updates the current datetime by modifying the updated_at variable
-        """
-        self.updated_at = datetime.now()
+        self.updated_at = datetime.utcnow()
         models.storage.save()
         return self.updated_at
 
+    # Json serialisation dict representation
     def to_dict(self):
-        """Returns a dictionary containing all keys/values of
-        __dict__ of the instance
-        """
-        d = {}
         new_d = {}
         new_d = self.__dict__.copy()
         new_d["__class__"] = str(self.__class__.__name__)
