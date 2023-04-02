@@ -1,148 +1,127 @@
 #!/usr/bin/python3
-"""
-main console of this
-"""
+'''Module of AirBNB console'''
 import cmd
-import models
+import sys
+import os
+from models import storage
 from models.base_model import BaseModel
-from shlex import split
+from models.user import User
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
+
 
 class HBNBCommand(cmd.Cmd):
-    """
-    command interpreter
-    """
-    prompt = "(hbnb)"
-    classes = ["BaseModel"]
+    '''Console Function'''
+    prompt = "(hbnb) "
 
-    def do_quit(self, line):
-        """
-        quits the console
-        """
+    def do_quit(self, arg):
+        ''' Exit the program'''
         return True
 
-    def do_EOF(self, line):
-        """
-        eof write in
-        :return: True and prints an empty line
-        """
-        print()
+    def do_EOF(self, arg):
+        ''' Exit the program using EOF'''
         return True
 
     def emptyline(self):
-        """
-        :return: an empty line
-        """
+        ''' Do nothing when empty line entered'''
+        pass
 
-    def do_create(self, cls):
-        """
-        creates a new instance of BaseModel and then saves it to JSON
-        Prints file Id too.
-        """
-        if not cls:
-            return print("** class name missing **")
-        if ' ' in cls:
-            cls = cls.split(' ')[0]
-        if cls not in HBNBCommand.classes:
-            return print("** class doesn't exist **")
-        else:
-            new = eval(cls)()
-            print(new.id)
-            new.save()
+    def do_create(self, arg):
+        '''Creates a new instance of said Class'''
+        if len(arg) == 0:
+            print('** class name missing **')
+            return False
+        if arg not in ls:
+            print("** class doesn't exist **")
+            return False
+        new = eval(arg)()
+        storage.save()
+        print(new.id)
 
-    def do_show(self, args):
-        """
-        Prints the string representation of instance name + Id.
-        """
-        params = split(args)
-        if len(params) == 0:
-            return print("** class name missing **")
-        if params[0] not in HBNBCommand.classes:
-            return print("** class doesn't exist **")
-        if len(params) == 1:
+    def do_show(self, arg):
+        '''Prints string repr of said instance'''
+        arg = arg.split()
+        if len(arg) == 0:
+            print("** class name missing **")
+            return False
+        if arg[0] not in ls:
+            print("** class doesn't exist **")
+            return False
+        if len(arg) == 1:
             print("** instance id missing **")
-        else:
-            try:
-                k = params[0] + '.' + params[1]
-                if k in models.storage.all():
-                    print(models.storage.all()[k])
-                else:
-                    print("** no instance found **")
-            except Exception as e:
-                print("** class doesn't exist **")
+            return False
+        for key, value in storage.all().items():
+            if value.id == arg[1]:
+                if value.__class__.__name__ == arg[0]:
+                    print(value)
+                    return
+        print('** no instance found **')
 
-    def do_destroy(self, args):
-        """
-        Deletes an instance based on class name and id
-        :param args: the given paramatres
-        """
-        params = split(args)
-        if len(params) == 0:
-            return print("** class name missing **")
-        if params[0] not in HBNBCommand.classes:
-            return print("** class doesn't exist **")
-        if len(params) < 2:
-            return print("** instance id missing **")
+    def do_destroy(self, arg):
+        '''Removes instance from memory and JsonFile'''
+        arg = arg.split()
+        if len(arg) == 0:
+            print("** class name missing **")
+            return False
+        if arg[0] not in ls:
+            print("** class doesn't exist **")
+            return False
+        if len(arg) != 2:
+            print("** instance id missing **")
+            return False
+        check = arg[0] + '.' + arg[1]
+        if check in storage.all().keys():
+            del storage.all()[check]
+            storage.save()
         else:
-            try:
-                instance = params[0] + '.' + params[1]
-                if instance in models.storage.all():
-                    del models.storage.all()[instance]
-                    models.storage.save()
-                else:
-                    print("** no instance found **")
-            except Exception as e:
-                print("** class doesn't exist **")
+            print('** no instance found **')
 
-    def do_all(self, cls_name):
-        """
-        prints the string representation
-        :param cls_name: of instances based on classes
-        """
-        str_list = []
-        if not cls_name:
-            for v in models.storage.all().values():
-                str_list.append(str(v))
+    def do_all(self, arg):
+        '''Prints all str repr of instance of said Class'''
+        if len(arg) != 0:
+            if arg not in ls:
+                print("** class doesn't exist **")
+                return False
+            for key, value in storage.all().items():
+                if value.__class__.__name__ == arg:
+                    print(value)
         else:
-            if cls_name not in HBNBCommand.classes:
-                print("** class doesn't exist **")
-            for i, j in models.storage.all().items():
-                find = i.split(".")[0]
-                if i == cls_name:
-                    str_list.append(str(j))
-        print(str_list)
+            for key, value in storage.all().items():
+                print(value)
 
-    def do_update(self, args):
-        """
-        Updates an instance based on the class name and id
-        """
-        params = sp(args)
-        if len(params) == 0:
-            return(print("** class name missing **"))
-        if params[0] not in HBNBCommand.valid_models:
-            return(print("** class doesn't exist **"))
-        if len(params) == 1:
-            return(print("** instance id missing **"))
-        k = params[0] + "." + params[1]
-        if k not in models.storage.all().keys():
-            return(print("** no instance found **"))
-        if len(params) == 2:
+    def do_update(self, arg):
+        '''Updates values to said instance'''
+        arg = arg.split()
+        flag = 0
+        if len(arg) == 0:
+            print("** class name missing **")
+            return False
+        if arg[0] not in ls:
+            print("** class doesn't exist **")
+            return False
+        if len(arg) == 1:
+            print("** instance id missing **")
+            return False
+        for key, value in storage.all().items():
+            if value.id == (arg[1]):
+                flag += 1
+        if flag == 0:
+            print("** no instance found **")
+            return False
+        if len(arg) == 2:
             print("** attribute name missing **")
-        elif len(params) == 3:
+            return False
+        if len(arg) == 3:
             print("** value missing **")
-        else:
-            k = params[0] + '.' + params[1]
-            val = params[3]
-            try:
-                if val.isdigit():
-                    val = int(val)
-                elif float(val):
-                    val = float(val)
-            except ValueError:
-                pass
-            if k in models.storage.all():
-                setattr(models.storage.all()[k], params[2], params[3])
-                models.storage.save()
+            return False
+        val = arg[3].split('"')
+        setattr(value, arg[2], val[1])
+        storage.save()
 
 
 if __name__ == '__main__':
+    ls = ['BaseModel', 'User', 'City', 'State', 'Review', 'Amenity', 'Place']
     HBNBCommand().cmdloop()
