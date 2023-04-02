@@ -4,6 +4,7 @@ The steam engine
 """
 import json
 from os import path
+import os
 
 
 class FileStorage:
@@ -37,12 +38,12 @@ class FileStorage:
             json.dump(dicti, f)
 
     def reload(self):
-        """
-        :return: deserializes the JSON file
-        """
-        if path.isfile(self.__file_path):
-            with open(self.__file_path) as f:
-                dic = json.load(f)
-                for a, b in dic.items():
-                    cls = b["__class__"]
-                    self.new(eval(cls)(**b))
+        if os.path.exists(FileStorage.__file_path):
+            with open(FileStorage.__file_path, 'r') as f:
+                content = f.read()
+                if len(content) != 0:
+                    obj = json.loads(content)
+                    for key, value in obj.items():
+                        value = eval(value['__class__'])(**value)
+                        FileStorage.new(self, value)
+        return True
