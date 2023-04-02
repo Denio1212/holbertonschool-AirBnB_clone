@@ -31,11 +31,13 @@ class FileStorage:
         :return: serializes objects into a json file
         (path: __file_path)
         """
-        dicti = {}
-        for a, b in self.__objects.items():
-            dicti = {a: b.to_dict()}
-        with open(self.__file_path, mode="w") as f:
-            json.dump(dicti, f)
+        with open(FileStorage.__file_path, 'w') as f:
+            new_dict = {}
+            x = self.all()
+            for element in x:
+                new_dict[element] = x[element].to_dict()
+            f.write(json.dumps(new_dict))
+        return True
 
     def reload(self):
         """
