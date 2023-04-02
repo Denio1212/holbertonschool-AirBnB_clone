@@ -1,9 +1,7 @@
 #!/usr/bin/python3
 '''Module of AirBNB console'''
 import cmd
-import sys
-import os
-from models import storage
+from shlex import split as sp
 from models.base_model import BaseModel
 from models.user import User
 from models.state import State
@@ -11,6 +9,7 @@ from models.city import City
 from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
+import models
 
 
 class HBNBCommand(cmd.Cmd):
