@@ -53,13 +53,22 @@ class HBNBCommand(cmd.Cmd):
         """
         Prints the string representation of instance name + Id.
         """
-        arguments = split(args)
-        if len(arguments) == 0:
+        params = split(args)
+        if len(params) == 0:
             return print("** class name missing **")
-        if arguments[0] not in HBNBCommand.classes:
+        if params[0] not in HBNBCommand.classes:
             return print("** class doesn't exist **")
-        if len(arguments) == 1:
+        if len(params) == 1:
             print("** instance id missing **")
+        else:
+            try:
+                k = params[0] + '.' + params[1]
+                if k in models.storage.all():
+                    print(models.storage.all()[k])
+                else:
+                    print("** no instance found **")
+            except Exception as e:
+                print("** class doesn't exist **")
 
     def do_destroy(self, args):
         """
