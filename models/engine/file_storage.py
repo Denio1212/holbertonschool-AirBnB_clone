@@ -38,6 +38,9 @@ class FileStorage:
             json.dump(dicti, f)
 
     def reload(self):
+        """
+        deserializes the Json file
+        """
         if os.path.exists(FileStorage.__file_path):
             with open(FileStorage.__file_path, 'r') as f:
                 content = f.read()
