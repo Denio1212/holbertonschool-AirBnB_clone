@@ -5,6 +5,7 @@ from shlex import split as sp
 from models.base_model import BaseModel
 import models
 from models.engine.file_storage import FileStorage as storage
+from models.user import User
 
 
 class HBNBCommand(cmd.Cmd):
