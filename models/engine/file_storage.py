@@ -5,6 +5,13 @@ file storage
 from models.base_model import BaseModel
 import os
 import json
+from os import path
+from models.user import User
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
 
 
 class FileStorage:
@@ -14,35 +21,32 @@ class FileStorage:
 
     # Returns all objects stored in FileStorage
     def all(self):
-        return FileStorage.__objects
+        """Returns the dictionary __objects"""
+        return self.__objects
 
-    # Saves a new obj in FileStorage
     def new(self, obj):
-        key = f"{obj.__class__.__name__}.{obj.id}"
-        FileStorage.__objects[key] = obj
-        return True
+        """Sets in __objects the obj with key <obj class name>.id"""
+        k = obj.__class__.__name__ + "." + obj.id
+        self.__objects[k] = obj
 
-    # Saves the object at Json file
     def save(self):
-        with open(FileStorage.__file_path, 'w') as f:
-            new_dict = {}
-            x = self.all()
-            for element in x:
-                new_dict[element] = x[element].to_dict()
-            f.write(json.dumps(new_dict))
-        return True
+        """Serialises __objects to the JSON file (path: __file_path)"""
+        d = {k: v.to_dict()
+             for k, v in self.__objects.items()}
+        with open(self.__file_path, mode='w') as f:
+            json.dump(d, f)
 
-    # Loads from Json and creates objects
     def reload(self):
-        if os.path.exists(FileStorage.__file_path):
-            with open(FileStorage.__file_path, 'r') as f:
-                content = f.read()
-                if len(content) != 0:
-                    obj = json.loads(content)
-                    for key, value in obj.items():
-                        value = eval(value['__class__'])(**value)
-                        FileStorage.new(self, value)
-        return True
+        """Deserialises the JSON file to __objects (only if the JSON file
+        (__file_path) exists ; otherwise, do nothing. If the file doesn’t
+        exist, no exception should be raised)
+        """
+        if path.isfile(self.__file_path):
+            with open(self.__file_path) as f:
+                d = json.load(f)
+                for k, v in d.items():
+                    cls = v["__class__"]
+                    self.new(eval(cls)(**v))
 
     def file_path():
         return FileStorage.__file_path
