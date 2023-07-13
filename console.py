@@ -35,7 +35,7 @@ class HBNBCommand(cmd.Cmd):
     def do_create(self, cls):
         """Creates a new instance, saves it, and prints id"""
         if not cls:
-            return(print("** class name missing **"))
+            return (print("** class name missing **"))
         if ' ' in cls:
             cls = cls.split(' ')[0]
         if cls not in HBNBCommand.valid_models:
@@ -49,7 +49,7 @@ class HBNBCommand(cmd.Cmd):
         """Prints the str repr of an instance with class name and id"""
         params = sp(args)
         if len(params) == 0:
-            return(print("** class name missing **"))
+            return (print("** class name missing **"))
         if params[0] not in HBNBCommand.valid_models:
             return(print("** class doesn't exist **"))
         if len(params) == 1:
@@ -68,9 +68,9 @@ class HBNBCommand(cmd.Cmd):
         """Deletes an instance based on the class name and id"""
         params = sp(args)
         if len(params) == 0:
-            return(print("** class name missing **"))
+            return (print("** class name missing **"))
         if params[0] not in HBNBCommand.valid_models:
-            return(print("** class doesn't exist **"))
+            return (print("** class doesn't exist **"))
         if len(params) == 1:
             print("** instance id missing **")
         else:
@@ -104,14 +104,14 @@ class HBNBCommand(cmd.Cmd):
         """Updates an instance based on the class name and id"""
         params = sp(args)
         if len(params) == 0:
-            return(print("** class name missing **"))
+            return (print("** class name missing **"))
         if params[0] not in HBNBCommand.valid_models:
-            return(print("** class doesn't exist **"))
+            return (print("** class doesn't exist **"))
         if len(params) == 1:
-            return(print("** instance id missing **"))
+            return (print("** instance id missing **"))
         k = params[0] + "." + params[1]
         if k not in models.storage.all().keys():
-            return(print("** no instance found **"))
+            return (print("** no instance found **"))
         if len(params) == 2:
             print("** attribute name missing **")
         elif len(params) == 3:
