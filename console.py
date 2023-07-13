@@ -8,112 +8,121 @@ from models.engine.file_storage import FileStorage as storage
 
 
 class HBNBCommand(cmd.Cmd):
-    '''Console Function'''
+    """HBNBCommand class"""
     prompt = "(hbnb) "
+    valid_models = ["BaseModel", "User", "State", "City", "Amenity", "Place",
+                    "Review"]
+    valid_cmds = ["all", "count", "show", "destroy", "update"]
 
-    def do_quit(self, arg):
-        ''' Exit the program'''
+    def do_quit(self, line):
+        """Quit command to exit the program"""
         return True
 
-    def do_EOF(self, arg):
-        ''' Exit the program using EOF'''
+    def do_EOF(self, line):
+        """Quit command to exit the program"""
+        print()
         return True
 
     def emptyline(self):
-        ''' Do nothing when empty line entered'''
-        pass
+        """Ensures that previous command is not run twice"""
 
-    def do_create(self, arg):
-        '''Creates a new instance of said Class'''
-        if len(arg) == 0:
-            print('** class name missing **')
-            return False
-        if arg not in ls:
+    def do_create(self, cls):
+        """Creates a new instance, saves it, and prints id"""
+        if not cls:
+            return(print("** class name missing **"))
+        if ' ' in cls:
+            cls = cls.split(' ')[0]
+        if cls not in HBNBCommand.valid_models:
             print("** class doesn't exist **")
-            return False
-        new = eval(arg)()
-        storage.save()
-        print(new.id)
-
-    def do_show(self, arg):
-        '''Prints string repr of said instance'''
-        arg = arg.split()
-        if len(arg) == 0:
-            print("** class name missing **")
-            return False
-        if arg[0] not in ls:
-            print("** class doesn't exist **")
-            return False
-        if len(arg) == 1:
-            print("** instance id missing **")
-            return False
-        for key, value in storage.all().items():
-            if value.id == arg[1]:
-                if value.__class__.__name__ == arg[0]:
-                    print(value)
-                    return
-        print('** no instance found **')
-
-    def do_destroy(self, arg):
-        '''Removes instance from memory and JsonFile'''
-        arg = arg.split()
-        if len(arg) == 0:
-            print("** class name missing **")
-            return False
-        if arg[0] not in ls:
-            print("** class doesn't exist **")
-            return False
-        if len(arg) != 2:
-            print("** instance id missing **")
-            return False
-        check = arg[0] + '.' + arg[1]
-        if check in storage.all().keys():
-            del storage.all()[check]
-            storage.save()
         else:
-            print('** no instance found **')
+            new_class = eval(cls)()
+            print(new_class.id)
+            new_class.save()
 
-    def do_all(self, arg):
-        '''Prints all str repr of instance of said Class'''
-        if len(arg) != 0:
-            if arg not in ls:
+    def do_show(self, args):
+        """Prints the str repr of an instance with class name and id"""
+        params = sp(args)
+        if len(params) == 0:
+            return(print("** class name missing **"))
+        if params[0] not in HBNBCommand.valid_models:
+            return(print("** class doesn't exist **"))
+        if len(params) == 1:
+            print("** instance id missing **")
+        else:
+            try:
+                k = params[0] + '.' + params[1]
+                if k in models.storage.all():
+                    print(models.storage.all()[k])
+                else:
+                    print("** no instance found **")
+            except Exception as e:
                 print("** class doesn't exist **")
-                return False
-            for key, value in storage.all().items():
-                if value.__class__.__name__ == arg:
-                    print(value)
-        else:
-            for key, value in storage.all().items():
-                print(value)
 
-    def do_update(self, arg):
-        '''Updates values to said instance'''
-        arg = arg.split()
-        flag = 0
-        if len(arg) == 0:
-            print("** class name missing **")
-            return False
-        if arg[0] not in ls:
-            print("** class doesn't exist **")
-            return False
-        if len(arg) == 1:
+    def do_destroy(self, args):
+        """Deletes an instance based on the class name and id"""
+        params = sp(args)
+        if len(params) == 0:
+            return(print("** class name missing **"))
+        if params[0] not in HBNBCommand.valid_models:
+            return(print("** class doesn't exist **"))
+        if len(params) == 1:
             print("** instance id missing **")
-            return False
-        for key, value in storage.all().items():
-            if value.id == (arg[1]):
-                flag += 1
-        if flag == 0:
-            print("** no instance found **")
-            return False
-        if len(arg) == 2:
+        else:
+            try:
+                k = params[0] + '.' + params[1]
+                if k in models.storage.all():
+                    del models.storage.all()[k]
+                    models.storage.save()
+                else:
+                    print("** no instance found **")
+            except Exception as e:
+                print("** class doesn't exist **")
+
+    def do_all(self, cls_name):
+        """Prints all str repr of all instances of class name"""
+        str_list = []
+        if not cls_name:
+            for v in models.storage.all().values():
+                str_list.append(str(v))
+        else:
+            if cls_name not in HBNBCommand.valid_models:
+                print("** class doesn't exist **")
+                return
+            for k, v in models.storage.all().items():
+                left = k.split('.')[0]
+                if left == cls_name:
+                    str_list.append(str(v))
+        print(str_list)
+
+    def do_update(self, args):
+        """Updates an instance based on the class name and id"""
+        params = sp(args)
+        if len(params) == 0:
+            return(print("** class name missing **"))
+        if params[0] not in HBNBCommand.valid_models:
+            return(print("** class doesn't exist **"))
+        if len(params) == 1:
+            return(print("** instance id missing **"))
+        k = params[0] + "." + params[1]
+        if k not in models.storage.all().keys():
+            return(print("** no instance found **"))
+        if len(params) == 2:
             print("** attribute name missing **")
-            return False
-        if len(arg) == 3:
+        elif len(params) == 3:
             print("** value missing **")
-            return False
-        val = arg[3].split('"')
-        setattr(value, arg[2], val[1])
-        storage.save()
+        else:
+            k = params[0] + '.' + params[1]
+            val = params[3]
+            try:
+                if val.isdigit():
+                    val = int(val)
+                elif float(val):
+                    val = float(val)
+            except ValueError:
+                pass
+            if k in models.storage.all():
+                setattr(models.storage.all()[k], params[2], params[3])
+                models.storage.save()
 
 
 if __name__ == '__main__':
